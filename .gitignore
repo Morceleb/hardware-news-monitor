@@ -1,0 +1,6 @@
+# 构建产物与本地数据，不纳入版本控制
+site/
+data/
+__pycache__/
+*.pyc
+.env
