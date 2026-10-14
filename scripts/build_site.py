@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """把采集到的新闻生成静态站点。
 
 读取 data/news.json，渲染一个简单的 index.html 到 site/ 目录。

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """采集 DIY 硬件新闻。
 
 从 IT之家 / cnbeta 的 RSS 抓取，按关键词过滤出硬件相关条目，
@@ -13,7 +12,7 @@ from __future__ import annotations
 import json
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
@@ -52,6 +51,18 @@ def strip_html(text: str) -> str:
 def is_hardware(title: str, summary: str) -> bool:
     blob = f"{title} {summary}"
     return any(k.lower() in blob.lower() for k in KEYWORDS)
+
+
+def dedupe_by_link(items: list[dict]) -> list[dict]:
+    """按 link 字段去重，保留首次出现的条目；无 link 的条目跳过。"""
+    seen: set[str] = set()
+    unique: list[dict] = []
+    for it in items:
+        link = it.get("link", "")
+        if link and link not in seen:
+            seen.add(link)
+            unique.append(it)
+    return unique
 
 
 def fetch_rss(url: str) -> list[dict]:
@@ -93,15 +104,10 @@ def main() -> int:
     ]
 
     # 去重（按 link）
-    seen: set[str] = set()
-    unique: list[dict] = []
-    for it in hardware_items:
-        if it["link"] and it["link"] not in seen:
-            seen.add(it["link"])
-            unique.append(it)
+    unique = dedupe_by_link(hardware_items)
 
     output = {
-        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(UTC).isoformat(),
         "count": len(unique),
         "items": unique,
     }
