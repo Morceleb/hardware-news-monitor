@@ -27,4 +27,4 @@ python scripts/build_site.py
 1. `weekly-scrape.yml` 每周一 09:00（北京时间）自动触发，也可在 Actions 页手动 `Run workflow`。
 2. 在 GitHub 提供的 Ubuntu 容器里装依赖 → 采集 → 生成站点。
 3. 用 `peaceiris/actions-gh-pages` 把 `site/` 推送到 `gh-pages` 分支。
-4. 在仓库 Settings → Pages 里把 Source 设为 `gh-pages` 分支，即可访问 `https://<用户名>.github.io/hardware-news-monitor/`。
+4. 在仓库 Settings → Pages 里把 Source 设为 `gh-pages` 分支，即可访问 `https://morceleb.github.io/hardware-news-monitor/`。
